@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     #print("Show me in browser: ",sys.argv[1])
 
-    text = open('C:\\xampp\\htdocs\\youtube_ai_website\\ai_brain\\titles.txt', 'rb').read().decode(encoding='utf-8')
+    text = open('titles.txt', 'rb').read().decode(encoding='utf-8')
 
     # # length of text is the number of characters in it
     # print('Length of text: {} characters'.format(len(text)))
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     model = build_model(vocab_size, embedding_dim, rnn_units, batch_size=1)
 
     # model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
-    model.load_weights('C:/xampp/htdocs/youtube_ai_website/ai_brain/checkpoints/ckpt_60')
+    model.load_weights('checkpoints/ckpt_60')
 
     model.build(tf.TensorShape([1, None]))
     #model.summary()
