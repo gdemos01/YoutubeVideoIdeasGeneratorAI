@@ -22,7 +22,7 @@ class YoutubeAI extends Controller
     		$text = $request->seed;
     	}
 
-		$process = new Process("python C:/xampp\htdocs/youtube_ai_website/ai_brain/Controller.py \"{$text}\"");
+		$process = new Process("python C:/xampp/htdocs/youtube_video_idea_generator_ai/youtube_ai_website/ai_brain/Controller.py \"--generate\" \"--seed\" \"{$text}\"");
 		$process->run();
 
 		// executes after the command finishes

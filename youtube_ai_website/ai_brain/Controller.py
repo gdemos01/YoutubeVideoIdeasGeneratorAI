@@ -1,4 +1,5 @@
 import sys
+import argparse
 
 #from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -73,19 +74,23 @@ def generate_text(model, start_string):
 
 if __name__ == '__main__':
 
-    #print("Show me in browser: ",sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train", action="store_true")
+    parser.add_argument("--generate",action="store_true")
+    parser.add_argument("--seed")
+    args = parser.parse_args()
 
-    text = open('titles.txt', 'rb').read().decode(encoding='utf-8')
+    text = open('C:/xampp/htdocs/youtube_video_idea_generator_ai/youtube_ai_website/ai_brain/titles.txt', 'rb').read().decode(encoding='utf-8')
 
-    # # length of text is the number of characters in it
-    # print('Length of text: {} characters'.format(len(text)))
+    # length of text is the number of characters in it
+    #print('Length of text: {} characters'.format(len(text)))
 
     # Take a look at the first 250 characters in text
-    # print(text[:250])
+    #print(text[:250])
 
     # The unique characters in the file
     vocab = sorted(set(text))
-    # print('{} unique characters'.format(len(vocab)))
+    #print('{} unique characters'.format(len(vocab)))
 
     # Creating a mapping from unique characters to indices
     char2idx = {u: i for i, u in enumerate(vocab)}
@@ -98,25 +103,25 @@ if __name__ == '__main__':
     #     print('  {:4s}: {:3d},'.format(repr(char), char2idx[char]))
     # print('  ...\n}')
 
-    # Show how the first 13 characters from the text are mapped to integers
-    # print('{} ---- characters mapped to int ---- > {}'.format(repr(text[:13]), text_as_int[:13]))
+    #Show how the first 13 characters from the text are mapped to integers
+    #print('{} ---- characters mapped to int ---- > {}'.format(repr(text[:13]), text_as_int[:13]))
 
-    # The maximum length sentence we want for a single input in characters
-    # seq_length = 100
-    # examples_per_epoch = len(text) // (seq_length + 1)
+    #The maximum length sentence we want for a single input in characters
+    seq_length = 100
+    examples_per_epoch = len(text) // (seq_length + 1)
 
-    # # Create training examples / targets
-    # char_dataset = tf.data.Dataset.from_tensor_slices(text_as_int)
+    # Create training examples / targets
+    char_dataset = tf.data.Dataset.from_tensor_slices(text_as_int)
 
     # for i in char_dataset.take(5):
     #     print(idx2char[i.numpy()])
-    #
-    # sequences = char_dataset.batch(seq_length + 1, drop_remainder=True)
+
+    sequences = char_dataset.batch(seq_length + 1, drop_remainder=True)
 
     # for item in sequences.take(5):
     #     print(repr(''.join(idx2char[item.numpy()])))
-    #
-    # dataset = sequences.map(split_input_target)
+
+    dataset = sequences.map(split_input_target)
 
     # for input_example, target_example in dataset.take(1):
     #     print('Input data: ', repr(''.join(idx2char[input_example.numpy()])))
@@ -127,12 +132,17 @@ if __name__ == '__main__':
     #     print("  input: {} ({:s})".format(input_idx, repr(idx2char[input_idx])))
     #     print("  expected output: {} ({:s})".format(target_idx, repr(idx2char[target_idx])))
 
+    # Directory where the checkpoints will be saved
+    checkpoint_dir = 'C:/xampp/htdocs/youtube_video_idea_generator_ai/youtube_ai_website/ai_brain/checkpoints'
+    # Name of the checkpoint files
+    checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt_{epoch}")
+
     # Batch size
     BATCH_SIZE = 64
 
     BUFFER_SIZE = 10000
 
-    # dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE, drop_remainder=True)
+    dataset = dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE, drop_remainder=True)
 
     # Length of the vocabulary in chars
     vocab_size = len(vocab)
@@ -143,54 +153,49 @@ if __name__ == '__main__':
     # Number of RNN units
     rnn_units = 1024
 
-    # model = build_model(
-    #     vocab_size=len(vocab),
-    #     embedding_dim=embedding_dim,
-    #     rnn_units=rnn_units,
-    #     batch_size=BATCH_SIZE)
-    # print(len(vocab))
+    if args.train:
+        model = build_model(
+            vocab_size=len(vocab),
+            embedding_dim=embedding_dim,
+            rnn_units=rnn_units,
+            batch_size=BATCH_SIZE)
+        print(len(vocab))
 
-    # for input_example_batch, target_example_batch in dataset.take(1):
-    #     example_batch_predictions = model(input_example_batch)
-    #     print(example_batch_predictions.shape, "# (batch_size, sequence_length, vocab_size)")
+        # for input_example_batch, target_example_batch in dataset.take(1):
+        #     example_batch_predictions = model(input_example_batch)
+        #     print(example_batch_predictions.shape, "# (batch_size, sequence_length, vocab_size)")
 
-    # model.summary()
-    #
-    # sampled_indices = tf.random.categorical(example_batch_predictions[0], num_samples=1)
-    # sampled_indices = tf.squeeze(sampled_indices, axis=-1).numpy()
-    #
-    # print("Input: \n", repr("".join(idx2char[input_example_batch[0]])))
-    # print()
-    # print("Next Char Predictions: \n", repr("".join(idx2char[sampled_indices])))
-    #
-    # example_batch_loss = loss(target_example_batch, example_batch_predictions)
-    # print("Prediction shape: ", example_batch_predictions.shape, " # (batch_size, sequence_length, vocab_size)")
-    # print("scalar_loss:      ", example_batch_loss.numpy().mean())
+        model.summary()
 
-    # model.compile(optimizer='adam', loss=loss)
+        # sampled_indices = tf.random.categorical(example_batch_predictions[0], num_samples=1)
+        # sampled_indices = tf.squeeze(sampled_indices, axis=-1).numpy()
+        #
+        # print("Input: \n", repr("".join(idx2char[input_example_batch[0]])))
+        # print()
+        # print("Next Char Predictions: \n", repr("".join(idx2char[sampled_indices])))
 
-    # Directory where the checkpoints will be saved
-    checkpoint_dir = 'checkpoints'
-    # checkpoint_dir = './training_checkpoints'
-    # Name of the checkpoint files
-    # checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt_{epoch}")
-    #
-    # checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-    #     filepath=checkpoint_prefix,
-    #     save_weights_only=True)
+        # example_batch_loss = loss(target_example_batch, example_batch_predictions)
+        # print("Prediction shape: ", example_batch_predictions.shape, " # (batch_size, sequence_length, vocab_size)")
+        # print("scalar_loss:      ", example_batch_loss.numpy().mean())
 
-    #EPOCHS = 100
+        checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=checkpoint_prefix,
+            save_weights_only=True)
 
-    #history = model.fit(dataset, epochs=EPOCHS, callbacks=[checkpoint_callback])
 
-    # tf.train.latest_checkpoint(checkpoint_dir)
-    model = build_model(vocab_size, embedding_dim, rnn_units, batch_size=1)
+        model.load_weights(tf.train.latest_checkpoint(checkpoint_dir)) # Pickup Training from last checkpoint
+        model.compile(optimizer='adam', loss=loss)
 
-    # model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
-    model.load_weights('checkpoints/ckpt_60')
+        EPOCHS = 1
 
-    model.build(tf.TensorShape([1, None]))
-    #model.summary()
+        history = model.fit(dataset, epochs=EPOCHS, callbacks=[checkpoint_callback])
+    elif args.generate:
+        #tf.train.latest_checkpoint(checkpoint_dir)
+        model = build_model(vocab_size, embedding_dim, rnn_units, batch_size=1)
 
-    seed = sys.argv[1]
-    print(generate_text(model, seed))
+        model.load_weights(tf.train.latest_checkpoint(checkpoint_dir))
+        #model.load_weights('checkpoints/ckpt_60')
+
+        model.build(tf.TensorShape([1, None]))
+
+        print(generate_text(model, str(args.seed)))
