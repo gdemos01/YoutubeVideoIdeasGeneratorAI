@@ -80,7 +80,7 @@ if __name__ == '__main__':
     parser.add_argument("--seed")
     args = parser.parse_args()
 
-    text = open('C:/xampp/htdocs/youtube_video_idea_generator_ai/youtube_ai_website/ai_brain/titles.txt', 'rb').read().decode(encoding='utf-8')
+    text = open('titles.txt', 'rb').read().decode(encoding='utf-8')
 
     # length of text is the number of characters in it
     #print('Length of text: {} characters'.format(len(text)))
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     #     print("  expected output: {} ({:s})".format(target_idx, repr(idx2char[target_idx])))
 
     # Directory where the checkpoints will be saved
-    checkpoint_dir = 'C:/xampp/htdocs/youtube_video_idea_generator_ai/youtube_ai_website/ai_brain/checkpoints'
+    checkpoint_dir = 'checkpoints'
     # Name of the checkpoint files
     checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt_{epoch}")
 
@@ -183,7 +183,7 @@ if __name__ == '__main__':
             save_weights_only=True)
 
 
-        model.load_weights(tf.train.latest_checkpoint(checkpoint_dir)) # Pickup Training from last checkpoint
+        #model.load_weights(tf.train.latest_checkpoint(checkpoint_dir)) # Pickup Training from last checkpoint
         model.compile(optimizer='adam', loss=loss)
 
         EPOCHS = 1
