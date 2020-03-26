@@ -1,5 +1,5 @@
 # Youtube Video Idea Generator AI
-<img width="100%" src="https://github.com/gdemos01/TwitterInfluencerAI/blob/master/data/KylieTrump.jpg">
+<img width="100%" src="https://github.com/gdemos01/youtube_video_idea_generator_ai/blob/master/youtubers.jpg">
 
 This AI uses Natural Language Processing to generate new YouTube video titles / ideas? It was trained using 20000 video titles collected from some of the most popular YouTube channels.
 
@@ -16,6 +16,7 @@ python Controller.py --collect "YOUR API KEY"
 
 ### Train Model
 The command bellow trains the model for 10 epochs. Each epoch creates a new checkpoint if the model is improved. You can change the input file and the number of epochs through the code.
+
 ```
 python Controller.py --train
 ```
