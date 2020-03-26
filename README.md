@@ -4,6 +4,7 @@
 This AI uses Natural Language Processing to generate new YouTube video titles / ideas? It was trained using 20000 video titles collected from some of the most popular YouTube channels.
 
 ### YouTube Video with Process and Results: PENDING
+### Try the AI on this link: https://theaimango.com/youtubeideasai/
 
 ## How to use
 
